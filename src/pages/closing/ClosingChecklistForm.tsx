@@ -2,15 +2,18 @@ import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface ClosingChecklistData {
-  acOff: boolean;
-  lightsOff: boolean;
-  trash: boolean;
-  doorsLocked: boolean;
-  windowsShut: boolean;
-  projector: boolean;
-  fans: boolean;
-  systemShutdown: boolean;
-  fireExit: boolean;
+  cctvWorking: boolean;
+  tablesCleanAndTidy: boolean;
+  freeTraysAvailableAndPlaced: boolean;
+  toolsInRightPlace: boolean;
+  sparesInRightPlace: boolean;
+  floorCleanAndTidy: boolean;
+  cablesSafeAndLaid: boolean;
+  glassesAndCupsCleaned: boolean;
+  wasteBasketsFilledOutside: boolean;
+  emptyWasteBasketsPutBack: boolean;
+  acSwitchedOff: boolean;
+  doorLocked: boolean;
   remarks: string;
   submittedBy: string;
   timestamp: string;
@@ -20,15 +23,18 @@ type ClosingChecklistDummyKey = Exclude<keyof ClosingChecklistData, 'remarks' | 
 
 export default function ClosingChecklistForm() {
   const [checklistItems, setChecklistItems] = useState<ClosingChecklistData>({
-    acOff: false,
-    lightsOff: false,
-    trash: false,
-    doorsLocked: false,
-    windowsShut: false,
-    projector: false,
-    fans: false,
-    systemShutdown: false,
-    fireExit: false,
+    cctvWorking: false,
+    tablesCleanAndTidy: false,
+    freeTraysAvailableAndPlaced: false,
+    toolsInRightPlace: false,
+    sparesInRightPlace: false,
+    floorCleanAndTidy: false,
+    cablesSafeAndLaid: false,
+    glassesAndCupsCleaned: false,
+    wasteBasketsFilledOutside: false,
+    emptyWasteBasketsPutBack: false,
+    acSwitchedOff: false,
+    doorLocked: false,
     remarks: '',
     submittedBy: '',
     timestamp: ''
@@ -39,15 +45,18 @@ export default function ClosingChecklistForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const checklistOptions: { key: ClosingChecklistDummyKey; label: string }[] = [
-    { key: 'acOff', label: 'AC Off' },
-    { key: 'lightsOff', label: 'Lights Off' },
-    { key: 'trash', label: 'Trash Emptied' },
-    { key: 'doorsLocked', label: 'Doors Locked' },
-    { key: 'windowsShut', label: 'Windows Shut' },
-    { key: 'projector', label: 'Projector Off' },
-    { key: 'fans', label: 'Fans Off' },
-    { key: 'systemShutdown', label: 'System Shutdown' },
-    { key: 'fireExit', label: 'Fire Exit Clear' }
+    { key: 'cctvWorking', label: 'CCTV Working' },
+    { key: 'tablesCleanAndTidy', label: 'Tables, clean and tidy?' },
+    { key: 'freeTraysAvailableAndPlaced', label: 'Free trays: Available and properly placed?' },
+    { key: 'toolsInRightPlace', label: 'Tools: in right place?' },
+    { key: 'sparesInRightPlace', label: 'Spares in right place?' },
+    { key: 'floorCleanAndTidy', label: 'Floor: clean and tidy?' },
+    { key: 'cablesSafeAndLaid', label: 'Cables: Safe and properly laid?' },
+    { key: 'glassesAndCupsCleaned', label: 'Glasses and Cups: cleaned and in proper tray?' },
+    { key: 'wasteBasketsFilledOutside', label: 'Waste Basked: Filled baskets outside?' },
+    { key: 'emptyWasteBasketsPutBack', label: 'Empty waste baskets, put back in the lab' },
+    { key: 'acSwitchedOff', label: 'AC switched off on remote, power switch on' },
+    { key: 'doorLocked', label: 'Door Locked?' },
   ];
 
   const handleCheckboxChange = (key: ClosingChecklistDummyKey) => {
@@ -79,15 +88,18 @@ export default function ClosingChecklistForm() {
           mode: "no-cors",
           body: JSON.stringify({
             type: 'closing',
-            acOff: checklistItems.acOff ? 'Yes' : 'No',
-            lightsOff: checklistItems.lightsOff ? 'Yes' : 'No',
-            trash: checklistItems.trash ? 'Yes' : 'No',
-            doorsLocked: checklistItems.doorsLocked ? 'Yes' : 'No',
-            windowsShut: checklistItems.windowsShut ? 'Yes' : 'No',
-            projector: checklistItems.projector ? 'Yes' : 'No',
-            fans: checklistItems.fans ? 'Yes' : 'No',
-            systemShutdown: checklistItems.systemShutdown ? 'Yes' : 'No',
-            fireExit: checklistItems.fireExit ? 'Yes' : 'No',
+            cctvWorking: checklistItems.cctvWorking ? 'Yes' : 'No',
+            tablesCleanAndTidy: checklistItems.tablesCleanAndTidy ? 'Yes' : 'No',
+            freeTraysAvailableAndPlaced: checklistItems.freeTraysAvailableAndPlaced ? 'Yes' : 'No',
+            toolsInRightPlace: checklistItems.toolsInRightPlace ? 'Yes' : 'No',
+            sparesInRightPlace: checklistItems.sparesInRightPlace ? 'Yes' : 'No',
+            floorCleanAndTidy: checklistItems.floorCleanAndTidy ? 'Yes' : 'No',
+            cablesSafeAndLaid: checklistItems.cablesSafeAndLaid ? 'Yes' : 'No',
+            glassesAndCupsCleaned: checklistItems.glassesAndCupsCleaned ? 'Yes' : 'No',
+            wasteBasketsFilledOutside: checklistItems.wasteBasketsFilledOutside ? 'Yes' : 'No',
+            emptyWasteBasketsPutBack: checklistItems.emptyWasteBasketsPutBack ? 'Yes' : 'No',
+            acSwitchedOff: checklistItems.acSwitchedOff ? 'Yes' : 'No',
+            doorLocked: checklistItems.doorLocked ? 'Yes' : 'No',
             submittedBy: submittedBy,
             remarks: remarks,
             timestamp: currentTimestamp,
@@ -98,15 +110,18 @@ export default function ClosingChecklistForm() {
       toast.success('Closing checklist submitted successfully!');
       // Reset form
       setChecklistItems({
-        acOff: false,
-        lightsOff: false,
-        trash: false,
-        doorsLocked: false,
-        windowsShut: false,
-        projector: false,
-        fans: false,
-        systemShutdown: false,
-        fireExit: false,
+        cctvWorking: false,
+        tablesCleanAndTidy: false,
+        freeTraysAvailableAndPlaced: false,
+        toolsInRightPlace: false,
+        sparesInRightPlace: false,
+        floorCleanAndTidy: false,
+        cablesSafeAndLaid: false,
+        glassesAndCupsCleaned: false,
+        wasteBasketsFilledOutside: false,
+        emptyWasteBasketsPutBack: false,
+        acSwitchedOff: false,
+        doorLocked: false,
         remarks: '',
         submittedBy: '',
         timestamp: ''

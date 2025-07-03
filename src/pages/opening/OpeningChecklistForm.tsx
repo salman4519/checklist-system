@@ -2,10 +2,13 @@ import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface OpeningChecklistData {
-  ac: boolean;
-  cctv: boolean;
-  tablesClean: boolean;
-  water: boolean;
+  cctvWorking: boolean;
+  doorLockProperlyPlaced: boolean;
+  emptyWasteBaskets: boolean;
+  floorCablesSafe: boolean;
+  drinkingWaterAvailable: boolean;
+  bagsKeptProperly: boolean;
+  freeTraysAvailable: boolean;
   remarks: string;
   submittedBy: string;
   timestamp: string;
@@ -15,10 +18,13 @@ type OpeningChecklistDummyKey = Exclude<keyof OpeningChecklistData, 'remarks' | 
 
 export default function OpeningChecklistForm() {
   const [checklist, setChecklist] = useState<OpeningChecklistData>({
-    ac: false,
-    cctv: false,
-    tablesClean: false,
-    water: false,
+    cctvWorking: false,
+    doorLockProperlyPlaced: false,
+    emptyWasteBaskets: false,
+    floorCablesSafe: false,
+    drinkingWaterAvailable: false,
+    bagsKeptProperly: false,
+    freeTraysAvailable: false,
     remarks: '',
     submittedBy: '',
     timestamp: ''
@@ -64,10 +70,13 @@ export default function OpeningChecklistForm() {
           mode: "no-cors",
           body: JSON.stringify({
             type: 'opening',
-            ac: checklist.ac ? 'Yes' : 'No',
-            cctv: checklist.cctv ? 'Yes' : 'No',
-            tablesClean: checklist.tablesClean ? 'Yes' : 'No',
-            water: checklist.water ? 'Yes' : 'No',
+            cctvWorking: checklist.cctvWorking ? 'Yes' : 'No',
+            doorLockProperlyPlaced: checklist.doorLockProperlyPlaced ? 'Yes' : 'No',
+            emptyWasteBaskets: checklist.emptyWasteBaskets ? 'Yes' : 'No',
+            floorCablesSafe: checklist.floorCablesSafe ? 'Yes' : 'No',
+            drinkingWaterAvailable: checklist.drinkingWaterAvailable ? 'Yes' : 'No',
+            bagsKeptProperly: checklist.bagsKeptProperly ? 'Yes' : 'No',
+            freeTraysAvailable: checklist.freeTraysAvailable ? 'Yes' : 'No',
             submittedBy: checklist.submittedBy,
             remarks: checklist.remarks,
             timestamp: currentTimestamp,
@@ -78,10 +87,13 @@ export default function OpeningChecklistForm() {
       toast.success('Opening checklist submitted successfully!');
       // Reset form
       setChecklist({
-        ac: false,
-        cctv: false,
-        tablesClean: false,
-        water: false,
+        cctvWorking: false,
+        doorLockProperlyPlaced: false,
+        emptyWasteBaskets: false,
+        floorCablesSafe: false,
+        drinkingWaterAvailable: false,
+        bagsKeptProperly: false,
+        freeTraysAvailable: false,
         remarks: '',
         submittedBy: '',
         timestamp: ''
@@ -95,10 +107,13 @@ export default function OpeningChecklistForm() {
   };
 
   const openingChecklistOptions: { key: OpeningChecklistDummyKey; label: string }[] = [
-    { key: 'ac', label: 'AC Check' },
-    { key: 'cctv', label: 'CCTV Check' },
-    { key: 'tablesClean', label: 'Tables Clean' },
-    { key: 'water', label: 'Water Availability' },
+    { key: 'cctvWorking', label: 'CCTV Working' },
+    { key: 'doorLockProperlyPlaced', label: 'Door Lock Properly Placed in the Lab' },
+    { key: 'emptyWasteBaskets', label: 'Empty waste baskets, put back in the lab' },
+    { key: 'floorCablesSafe', label: 'Floor cables safe?' },
+    { key: 'drinkingWaterAvailable', label: 'Drinking Water Available / Refilled?' },
+    { key: 'bagsKeptProperly', label: 'Bags kept at dedicated place properly?' },
+    { key: 'freeTraysAvailable', label: 'Free trays available?' },
   ];
 
   return (
