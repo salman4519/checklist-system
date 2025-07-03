@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 
 interface InsightsData {
-  ac: number;
-  cctv: number;
-  tablesClean: number;
+  cctvWorkingIssues: number;
+  acSwitchedOffIssues: number;
 }
 
 export default function InsightsSection() {
@@ -19,9 +18,8 @@ export default function InsightsSection() {
   }, []);
 
   const messages: { [key: string]: string } = {
-    ac: "AC was off",
-    cctv: "CCTV not working",
-    tablesClean: "Tables were not clean",
+    cctvWorkingIssues: "CCTV not working",
+    acSwitchedOffIssues: "AC was not switched off",
   };
 
   return (
@@ -34,7 +32,7 @@ export default function InsightsSection() {
             Object.entries(insights).filter(([_, v]) => (v as number) > 0).length > 0 ? (
               Object.entries(insights).map(([key, value]) => (
                 (value as number) > 0 && messages[key] ? (
-                  <li key={key} className="text-xs sm:text-sm font-medium break-words">❗ {messages[key]} in {value} of last 10 entries</li>
+                  <li key={key} className="text-xs sm:text-sm font-medium break-words">❗ {messages[key]} in {value} of last 3 days</li>
                 ) : null
               ))
             ) : (
