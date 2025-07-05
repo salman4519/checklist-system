@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sidebar, X } from 'lucide-react';
 
 interface NavbarProps {
