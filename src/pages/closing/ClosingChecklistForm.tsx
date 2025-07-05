@@ -137,7 +137,7 @@ export default function ClosingChecklistForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="w-full">
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -161,9 +161,9 @@ export default function ClosingChecklistForm() {
         }}
       />
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Checklist Items */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-4">
           <h3 className="text-lg font-semibold text-white mb-4">Checklist Items</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {checklistOptions.map((option) => (
@@ -197,7 +197,7 @@ export default function ClosingChecklistForm() {
         </div>
 
         {/* Text Inputs */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-4">
           <div>
             <label htmlFor="remarks" className="block text-sm font-medium text-gray-300 mb-2">
               Remarks

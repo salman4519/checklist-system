@@ -1,4 +1,5 @@
 import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 import { useState } from 'react';
 
 interface DashboardLayoutProps {
@@ -10,17 +11,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="bg-gray-800 p-2 rounded-lg text-white hover:bg-gray-700 transition-colors cursor-pointer"
-        >
-          <div className="w-6 h-6 flex items-center justify-center">
-            <i className={sidebarOpen ? 'ri-close-line' : 'ri-menu-line'}></i>
-          </div>
-        </button>
-      </div>
+      {/* Mobile Navbar */}
+      <Navbar 
+        onMenuToggle={() => setSidebarOpen(!sidebarOpen)} 
+        isMenuOpen={sidebarOpen} 
+      />
 
       {/* Mobile overlay */}
       {sidebarOpen && (
@@ -33,7 +28,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="lg:pl-64">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-16 lg:pt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:pt-8 pt-4">
           {children}
         </div>
       </div>

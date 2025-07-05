@@ -17,7 +17,7 @@ interface OpeningChecklistData {
 type OpeningChecklistDummyKey = Exclude<keyof OpeningChecklistData, 'remarks' | 'submittedBy' | 'timestamp'>;
 
 export default function OpeningChecklistForm() {
-  const [checklist, setChecklist] = useState<OpeningChecklistData>({
+  const [checklistItems, setChecklistItems] = useState<OpeningChecklistData>({
     cctvWorking: false,
     doorLockProperlyPlaced: false,
     emptyWasteBaskets: false,
@@ -30,28 +30,31 @@ export default function OpeningChecklistForm() {
     timestamp: ''
   });
 
+  const [remarks, setRemarks] = useState('');
+  const [submittedBy, setSubmittedBy] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setChecklist(prev => ({
-      ...prev,
-      [name]: checked
-    }));
-  };
+  const openingChecklistOptions: { key: OpeningChecklistDummyKey; label: string }[] = [
+    { key: 'cctvWorking', label: 'CCTV Working' },
+    { key: 'doorLockProperlyPlaced', label: 'Door Lock Properly Placed in the Lab' },
+    { key: 'emptyWasteBaskets', label: 'Empty waste baskets, put back in the lab' },
+    { key: 'floorCablesSafe', label: 'Floor cables safe?' },
+    { key: 'drinkingWaterAvailable', label: 'Drinking Water Available / Refilled?' },
+    { key: 'bagsKeptProperly', label: 'Bags kept at dedicated place properly?' },
+    { key: 'freeTraysAvailable', label: 'Free trays available?' },
+  ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setChecklist(prev => ({
+  const handleCheckboxChange = (key: OpeningChecklistDummyKey) => {
+    setChecklistItems(prev => ({
       ...prev,
-      [name]: value
+      [key]: !prev[key]
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!checklist.submittedBy.trim()) {
+    if (!submittedBy.trim()) {
       alert('Please enter who is submitting this checklist');
       return;
     }
@@ -70,15 +73,15 @@ export default function OpeningChecklistForm() {
           mode: "no-cors",
           body: JSON.stringify({
             type: 'opening',
-            cctvWorking: checklist.cctvWorking ? 'Yes' : 'No',
-            doorLockProperlyPlaced: checklist.doorLockProperlyPlaced ? 'Yes' : 'No',
-            emptyWasteBaskets: checklist.emptyWasteBaskets ? 'Yes' : 'No',
-            floorCablesSafe: checklist.floorCablesSafe ? 'Yes' : 'No',
-            drinkingWaterAvailable: checklist.drinkingWaterAvailable ? 'Yes' : 'No',
-            bagsKeptProperly: checklist.bagsKeptProperly ? 'Yes' : 'No',
-            freeTraysAvailable: checklist.freeTraysAvailable ? 'Yes' : 'No',
-            submittedBy: checklist.submittedBy,
-            remarks: checklist.remarks,
+            cctvWorking: checklistItems.cctvWorking ? 'Yes' : 'No',
+            doorLockProperlyPlaced: checklistItems.doorLockProperlyPlaced ? 'Yes' : 'No',
+            emptyWasteBaskets: checklistItems.emptyWasteBaskets ? 'Yes' : 'No',
+            floorCablesSafe: checklistItems.floorCablesSafe ? 'Yes' : 'No',
+            drinkingWaterAvailable: checklistItems.drinkingWaterAvailable ? 'Yes' : 'No',
+            bagsKeptProperly: checklistItems.bagsKeptProperly ? 'Yes' : 'No',
+            freeTraysAvailable: checklistItems.freeTraysAvailable ? 'Yes' : 'No',
+            submittedBy: submittedBy,
+            remarks: remarks,
             timestamp: currentTimestamp,
           }),
         }
@@ -86,7 +89,7 @@ export default function OpeningChecklistForm() {
 
       toast.success('Opening checklist submitted successfully!');
       // Reset form
-      setChecklist({
+      setChecklistItems({
         cctvWorking: false,
         doorLockProperlyPlaced: false,
         emptyWasteBaskets: false,
@@ -98,6 +101,8 @@ export default function OpeningChecklistForm() {
         submittedBy: '',
         timestamp: ''
       });
+      setRemarks('');
+      setSubmittedBy('');
     } catch (error) {
       console.error('Error submitting opening checklist:', error);
       toast.error('An error occurred while submitting the checklist.');
@@ -106,18 +111,8 @@ export default function OpeningChecklistForm() {
     }
   };
 
-  const openingChecklistOptions: { key: OpeningChecklistDummyKey; label: string }[] = [
-    { key: 'cctvWorking', label: 'CCTV Working' },
-    { key: 'doorLockProperlyPlaced', label: 'Door Lock Properly Placed in the Lab' },
-    { key: 'emptyWasteBaskets', label: 'Empty waste baskets, put back in the lab' },
-    { key: 'floorCablesSafe', label: 'Floor cables safe?' },
-    { key: 'drinkingWaterAvailable', label: 'Drinking Water Available / Refilled?' },
-    { key: 'bagsKeptProperly', label: 'Bags kept at dedicated place properly?' },
-    { key: 'freeTraysAvailable', label: 'Free trays available?' },
-  ];
-
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="w-full">
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -141,51 +136,51 @@ export default function OpeningChecklistForm() {
         }}
       />
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Checklist Items */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-4">
           <h3 className="text-lg font-semibold text-white mb-4">Checklist Items</h3>
-          {openingChecklistOptions.map((option) => (
-            <label
-              key={option.key}
-              className="flex items-center p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
-            >
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  name={option.key}
-                  checked={checklist[option.key]}
-                  onChange={handleCheckboxChange}
-                  className="sr-only"
-                />
-                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                  checklist[option.key]
-                    ? 'bg-purple-600 border-purple-600'
-                    : 'border-gray-500 bg-gray-600'
-                }`}>
-                  {checklist[option.key] && (
-                    <div className="w-3 h-3 flex items-center justify-center">
-                      <i className="ri-check-line text-white text-xs"></i>
-                    </div>
-                  )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {openingChecklistOptions.map((option) => (
+              <label
+                key={option.key}
+                className="flex items-center p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
+              >
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={checklistItems[option.key]}
+                    onChange={() => handleCheckboxChange(option.key)}
+                    className="sr-only"
+                  />
+                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                    checklistItems[option.key]
+                      ? 'bg-purple-600 border-purple-600'
+                      : 'border-gray-500 bg-gray-600'
+                  }`}>
+                    {checklistItems[option.key] && (
+                      <div className="w-3 h-3 flex items-center justify-center">
+                        <i className="ri-check-line text-white text-xs"></i>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <span className="ml-3 text-white text-sm">{option.label}</span>
-            </label>
-          ))}
+                <span className="ml-3 text-white text-sm">{option.label}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
         {/* Text Inputs */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-4">
           <div>
             <label htmlFor="remarks" className="block text-sm font-medium text-gray-300 mb-2">
               Remarks
             </label>
             <textarea
               id="remarks"
-              name="remarks"
-              value={checklist.remarks}
-              onChange={handleChange}
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
               rows={4}
               className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
               placeholder="Any additional notes or observations..."
@@ -199,9 +194,8 @@ export default function OpeningChecklistForm() {
             <input
               type="text"
               id="submittedBy"
-              name="submittedBy"
-              value={checklist.submittedBy}
-              onChange={handleChange}
+              value={submittedBy}
+              onChange={(e) => setSubmittedBy(e.target.value)}
               required
               className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Enter your name"
