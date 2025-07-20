@@ -1,4 +1,4 @@
-📝 Checklist System
+📝 Checklist-System
 
 
 A simple and efficient web-based checklist system designed for community workspaces like Curiosity Weekends. This tool allows users to fill daily opening and closing checklists, ensuring that key operational tasks are performed consistently and logged accurately.
